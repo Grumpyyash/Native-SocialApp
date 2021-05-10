@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SignupScreen from '../screens/SignupScreen';
 import LoginScreen from '../screens/LoginScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -24,6 +25,10 @@ const AuthStack = () => {
         setIsFirstLaunch(false);
       }
     }); 
+
+    GoogleSignin.configure({
+      webClientId: '58722115855-hlnapcsj5nhaocjh38uqejtpm53g9jce.apps.googleusercontent.com',
+    });
   
   }, []);
 

@@ -17,7 +17,7 @@ const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  const { login } = useContext(AuthContext);
+  const { login, googleLogin } = useContext(AuthContext);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -53,7 +53,8 @@ const LoginScreen = ({navigation}) => {
       <TouchableOpacity style={styles.forgotButton} onPress={() => {}}>
         <Text style={styles.navButtonText}>Forgot Password?</Text>
       </TouchableOpacity>
-
+        { Platform.OS === "android" ?
+        <View>
           <SocialButton
             buttonTitle="Sign In with Facebook"
             btnType="facebook"
@@ -67,8 +68,10 @@ const LoginScreen = ({navigation}) => {
             btnType="google"
             color="#de4d41"
             backgroundColor="#f5e7ea"
-            onPress={() => {}}
+            onPress={() => googleLogin()}
           />
+        </View>
+        : null }
 
       <TouchableOpacity
         style={styles.forgotButton}
