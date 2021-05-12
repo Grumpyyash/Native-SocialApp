@@ -11,12 +11,16 @@ import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
+import { AuthContext } from '../navigation/AuthProvider';
 
 const AddPostScreen = () => {
+  const {user, logout} = useContext(AuthContext);
 
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
+  const [post, setPost] = useState(null);
 
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
@@ -43,6 +47,36 @@ const AddPostScreen = () => {
   };
 
   const submitPost = async () => {
+    const imageUrl = await uploadImage();
+    console.log("Image Url:", imageUrl);
+
+    firestore()
+    .collection("posts")
+    .add({
+      userId: user.uid,
+      pos: post,
+      postImg: imageUrl,
+      postTime: firestore.Timestamp.fromDate(new Date()),
+      likes: null,
+      comments: null
+    })
+    .then(() => {
+      console.log("Post Added");
+      Alert.alert(
+        "Post Publised!",
+        "Your image has been uploaded to the firebase cloud storage!"
+      );
+      setPost(null);
+    })
+    .catch((e) => {
+      console.log("Something went wrong while uploading the data to firestore");
+    });
+  }
+
+  const uploadImage = async () => {
+    if(image === null){
+      return null;
+    }
     const uploadUri = image;
     let fileName = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
 
@@ -52,11 +86,14 @@ const AddPostScreen = () => {
 
     setUploading(true);
     setTransferred(0);
-
-    const task = storage().ref(fileName).putFile(uploadUri);
+    
+    const storageRef = storage().ref(`photos/${fileName}`);
+    const task = storageRef.putFile(uploadUri);
 
     try {
       await task;
+
+      const url = await storageRef.getDownloadURL();
 
       task.on('state_changed', taskSnapshot => {
         console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
@@ -70,8 +107,11 @@ const AddPostScreen = () => {
         "Image Uploaded!",
         "Your image has been successfully uploaded to the cloud"
       );
+      return url;
+
     } catch(e){
       console.log(e);
+      return null;
     }
     setImage(null);
   }
@@ -85,6 +125,8 @@ const AddPostScreen = () => {
               placeholder="What's on your mind?"
               multiline
               numberOfLines={4}
+              value={post}
+              onChangeText={(content) => setPost(content)}
             />
             {uploading ? (
               <StatusWrapper>
