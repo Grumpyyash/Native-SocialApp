@@ -8,14 +8,34 @@ import {
   ActivityIndicator,
   Button,
 } from 'react-native';
+import { InputField, InputWrapper } from '../styles/AddPost';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const AddPostScreen = () => {
     return (
         <View style={styles.container}>
-          <Text>Add Post Screen</Text>
-          <Button
-           title="Click Here"
-           onPress={() => alert("Button Clicked!")} />
+          <InputWrapper>
+            <InputField  
+              placeholder="What's on your mind?"
+              multiline
+              numberOfLines={4}
+            />
+          </InputWrapper>
+          <ActionButton buttonColor="#2e64e5">
+        <ActionButton.Item
+          buttonColor="#9b59b6"
+          title="Take Photo"
+          onPress={() => console.log("Taken Photo")}>
+          <Icon name="camera-outline" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+        <ActionButton.Item
+          buttonColor="#3498db"
+          title="Choose Photo"
+          onPress={() => {}}>
+          <Icon name="md-images-outline" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+      </ActionButton>
         </View>
     );
 };
