@@ -18,6 +18,7 @@ import {
   InteractionText,
   Divider,
 } from '../styles/FeedStyles';
+import ProgressiveImage from './ProgressiveImage';
 
 const PostCard = ({item, onDelete}) => {
   const {user, logout} = useContext(AuthContext);
@@ -54,7 +55,15 @@ const PostCard = ({item, onDelete}) => {
           </UserInfoText>          
         </UserInfo>
         <PostText>{item.pos}</PostText>
-        {item.postImg !== null ? <PostImg source={{uri: item.postImg}} /> : <Divider />}      
+        {/* {item.postImg !== null ? <PostImg source={{uri: item.postImg}} /> : <Divider />} */}
+        {item.postImg !== null ? (
+          <ProgressiveImage 
+            defaultImageSource={require("../assets/default-img.jpg")}
+            source={{uri: item.postImg}}
+            style={{width: "100%", height: 250}}
+            resizeMode="cover"
+          />
+        ) : <Divider />}      
         <InteractionWrapper>
           <Interaction active={item.liked}>
             <Ionicons name={likeIcon} size={25} color={likeIconColor} />
