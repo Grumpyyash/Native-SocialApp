@@ -5,6 +5,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import HomeScreen from "../screens/HomeScreen";
 import ChatScreen from '../screens/ChatScreen';
@@ -100,6 +101,20 @@ const FeedStack = ({navigation}) => (
   
 
 const AppStack = () => {
+
+  const getTabBarVisibility = (route) => {
+    // const routeName = route.state
+    //   ? route.state.routes[route.state.index].name
+    //   : '';
+
+    const routeName = getFocusedRouteNameFromRoute(route);
+
+    if (routeName === 'Chat') {
+      return false;
+    }
+    return true;
+  };
+
     return (
         <Tab.Navigator
       tabBarOptions={{
@@ -122,7 +137,8 @@ const AppStack = () => {
       <Tab.Screen
         name="Messages"
         component={MessageStack}
-        options={{
+        options={({route}) => ({
+          tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size}) => (
             <Ionicons
               name="chatbox-ellipses-outline"
@@ -130,7 +146,7 @@ const AppStack = () => {
               size={size}
             />
           ),
-        }}
+        })}
       />
       <Tab.Screen
         name="Profile"
