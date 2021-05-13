@@ -19,8 +19,9 @@ import {
   Divider,
 } from '../styles/FeedStyles';
 import ProgressiveImage from './ProgressiveImage';
+import { TouchableOpacity } from 'react-native';
 
-const PostCard = ({item, onDelete}) => {
+const PostCard = ({item, onDelete, onPress}) => {
   const {user, logout} = useContext(AuthContext);
 
   
@@ -50,7 +51,10 @@ const PostCard = ({item, onDelete}) => {
         <UserInfo>
           <UserImg source={{uri: item.userImg}} />
           <UserInfoText>
+          <TouchableOpacity onPress={onPress}>
             <UserName>{item.userName}</UserName>
+          </TouchableOpacity>
+            
             <PostTime>{moment(item.postTime.toDate()).fromNow()}</PostTime>
           </UserInfoText>          
         </UserInfo>
