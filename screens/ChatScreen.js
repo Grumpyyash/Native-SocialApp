@@ -1,47 +1,79 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {
   View,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  Text, Button
 } from 'react-native';
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { GiftedChat, Send } from 'react-native-gifted-chat';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const ChatScreen = () => {
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    setMessages([
+      {
+        _id: 1,
+        text: 'Hello developer',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: 'https://yashvardhanportfolio.netlify.app/static/media/yash%20(2).ca34b90c.jpg',
+        },
+      },
+      {
+        _id: 2,
+        text: 'Hello World',
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: 'React Native',
+          avatar: 'https://yashvardhanportfolio.netlify.app/static/media/yash%20(2).ca34b90c.jpg',
+        },
+      },
+    ])
+  }, []);
+
+  const onSend = useCallback((messages = []) => {
+     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+  }, []);
+
+  const renderSend = (props) => {
     return (
-        <ScrollView style={{flex: 1}} contentContainerStyle={{alignItems: "center"}}>
-        <SkeletonPlaceholder>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View style={{ width: 60, height: 60, borderRadius: 50 }} />
-            <View style={{ marginLeft: 20 }}>
-              <View style={{ width: 120, height: 20, borderRadius: 4 }} />
-              <View
-                style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}
-              />
-            </View>
-          </View>
-          <View style={{marginTop: 10, marginBottom: 30}}>
-            <View style={{width: 300, height: 20, borderRadius: 4}} />
-            <View style={{marginTop: 6, width: 250, height: 20, borderRadius: 4}} />
-            <View style={{marginTop: 6, width: 340, height: 200, borderRadius: 4}} />
-          </View>
-        </SkeletonPlaceholder>
-        <SkeletonPlaceholder>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View style={{ width: 60, height: 60, borderRadius: 50 }} />
-            <View style={{ marginLeft: 20 }}>
-              <View style={{ width: 120, height: 20, borderRadius: 4 }} />
-              <View
-                style={{ marginTop: 6, width: 80, height: 20, borderRadius: 4 }}
-              />
-            </View>
-          </View>
-          <View style={{marginTop: 10, marginBottom: 30}}>
-            <View style={{width: 300, height: 20, borderRadius: 4}} />
-            <View style={{marginTop: 6, width: 250, height: 20, borderRadius: 4}} />
-            <View style={{marginTop: 6, width: 340, height: 200, borderRadius: 4}} />
-          </View>
-        </SkeletonPlaceholder>
-        </ScrollView>
+      <Send {...props}>
+        <View>
+          <MaterialCommunityIcons
+            name="send-circle"
+            style={{marginBottom: 5, marginRight: 5}}
+            size={32}
+            color="#2e64e5"
+          />
+        </View>
+      </Send>
+    );
+  }
+
+  const scrollToBottomComponent = () => {
+    return(
+      <FontAwesome name='angle-double-down' size={22} color='#333' />
+    );
+  }
+
+    return (
+      <GiftedChat
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+        alwaysShowSend
+        renderSend={renderSend}
+        scrollToBottom
+        scrollToBottomComponent={scrollToBottomComponent}
+      />
     );
 };
 

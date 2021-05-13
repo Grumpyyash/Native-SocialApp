@@ -10,6 +10,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ChatScreen from '../screens/ChatScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AddPostScreen from '../screens/AddPostScreen';
+import MessagesScreen from "../screens/MessagesScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,6 +84,19 @@ const FeedStack = ({navigation}) => (
       />
     </Stack.Navigator>
   );
+
+  const MessageStack = ({navigation}) => (
+    <Stack.Navigator>
+      <Stack.Screen name="Messages" component={MessagesScreen} />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={({route}) => ({
+          title: route.params.userName
+        })}
+      />
+    </Stack.Navigator>
+  );
   
 
 const AppStack = () => {
@@ -107,7 +121,7 @@ const AppStack = () => {
       />
       <Tab.Screen
         name="Messages"
-        component={ChatScreen}
+        component={MessageStack}
         options={{
           tabBarIcon: ({color, size}) => (
             <Ionicons
