@@ -1,4 +1,8 @@
 {
   "name": "SocialApp",
-  "displayName": "SocialApp"
+  "slug": "SocialApp",
+  "sdkVersion": "41.0.0",
+  "android": {
+    "package": "com.yash_dn.SocialApp"
+  }
 }
