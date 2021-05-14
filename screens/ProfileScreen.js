@@ -60,6 +60,7 @@ const ProfileScreen = ({navigation, route}) => {
     } catch(e) {
       console.log(e);
     }
+    console.log(user);
   };
 
   useEffect(() => {
@@ -77,10 +78,10 @@ const ProfileScreen = ({navigation, route}) => {
       >
         <Image 
           style={styles.userImg}
-          source={require("../assets/users/user-2.jpg")}
+          source={{uri: user.photoURL}}
         />
-        <Text style={styles.userName}>John Doe</Text>
-        <Text>{route.params ? route.params.userId : user.uid}</Text>
+        <Text style={styles.userName}>{user.displayName}</Text>
+        <Text>{user.email}</Text>
         <Text style={styles.aboutUser}>
           Lorem ipsum idhar udhar
         </Text>
@@ -119,6 +120,10 @@ const ProfileScreen = ({navigation, route}) => {
             <Text style={styles.userInfoTitle}>100</Text>
             <Text style={styles.userInfoSubTitle}>Following</Text>
           </View>
+        </View>
+
+        <View style={styles.userInfoItem}>
+            <Text style={styles.userInfoSubTitle}>YOUR POSTS</Text>
         </View>
 
         {posts.map((item) => (
@@ -191,5 +196,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     textAlign: 'center',
+    marginBottom: 12
   },
 });

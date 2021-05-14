@@ -14,6 +14,7 @@ import PostCard from "../components/PostCard";
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import {AuthContext} from '../navigation/AuthProvider';
 
 import { Container } from "../styles/FeedStyles";
 
@@ -65,6 +66,7 @@ const Posts = [
 ]
 
 const HomeScreen = ({navigation}) => {
+  const {user, logout} = useContext(AuthContext);
 
   const [posts, setPosts] = useState(null);
   const [loading, setLoading] = useState(true);
